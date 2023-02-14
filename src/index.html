@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kebab</title>
+    <!-- vue js cdn link -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- tailwindcss cdn link -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- boxicon  -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <link rel="stylesheet" href="./output.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <div id="root">
+        <header class="bg-green-400 w-full shadow-orange-200">
+            <div class="container mx-auto px-5">
+                <nav class="nav flex justify-between h-[80px] items-center">
+                    <a href="https://vuejs.org" class="text-white text-2xl hover:scale-125 duration-150"><img src="./images/vuejs_logo_icon_169247.svg" alt=""></a>
+                    <i class='bx bx-menu text-3xl text-white' @click ="setToggle"></i>
+                </nav>
+            </div>
+        </header>
+        <main class="min-h-screen flex ">
+            <aside class="bg-green-100 w-1/6 shadow-xl min-h-screen " v-show="toggle">
+                <ul class="list">
+                        <li  class=" list__item p-4 bg-green-300 m-1 shover:bg-green-300 text-slate-800 font-semibold uppercase text-xl rounded-xl" v-for="item in navlinks">
+                            <a href="#" class="list__item-link">{{item.title}}</a>
+                        </li>
+                </ul>
+            </aside>
+
+            <section class="main bg-green-200 min-h-screen flex-grow" s-show="toggle">
+                <div class="container mx-auto">
+                    <h1 class="ml-[170px] text-2xl mt-8 font-[Sans]">Posts from users</h1>
+                    <div class="overflow-y-auto card w-[1200px] h-[400px] shadow-2xl bg-white m-5 mx-auto rounded-xl p-5">
+                        <ul class="post__list" >
+                            <li class=" flex items-center shadow-lg border rounded-xl p-3 m-3 gap-3 hover:bg-gradient-to-r from-green-300 to-indigo-300 duration-100" v-for="post in postList">
+                                <span class="flex justify-center items-center w-8 h-8 bg-cyan-500 rounded-full text-white">
+                                    {{post.id}}
+                                </span>
+                                <p>{{post.title}}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form__card w-[1200px] h-[400px] shadow-2xl bg-white m-5 rounded-xl p-5 mx-auto">
+                        <!-- form starts -->
+                        <form action="" @submit="addNewTask">
+                            <label for="taskname" class="w-4/5" id="taskname">
+                                <p class="ml-32 mb-4 font-medium">Enter title</p>
+                                <input type="text" placeholder="Enter your todos" class="p-4  border rounded-lg bg-blue-50 w-4/5 focus:ring-2 focus:ring-green-500 focus:outline-none mx-auto block" id="taskname" v-bind:value="taskName" @input="e=>taskName=e.target.value">
+                            </label>
+                            
+                            <label for="taskdate">
+                                <p class="ml-32 my-4 font-medium">Enter task date</p>
+                                <input type="date" class="p-4  border rounded-lg bg-blue-50 w-4/5 focus:ring-2 focus:ring-green-500 focus:outline-none mx-auto block mb-11"v-bind:value="taskDeadline" @input="e=>taskDeadline=e.target.value">
+                            </label>
+                            <button type="submit" class=" p-4 w-full bg-green-400 mx-auto block  w-4/5 rounded-lg text-lg font-bold text-white hover:bg-green-500">Add to tasks</button>
+                        </form>
+                    <!-- form ends -->
+                    </div>
+                
+                <!-- displaying tasks -->
+                
+                <div class="card w-[1200px] min-h-[250px] shadow-2xl bg-white m-5 rounded-xl p-5 mx-auto">
+                    <ul class="list__task " v-if="tasks.length">
+                        <li class="list__task-item bg-green-200 rounded-lg my-3 p-5" v-for="item in tasks">
+                            {{item.title}}
+                           <p>
+                           </p> 
+                        </li>
+                    </ul>
+                    <ul class="list__task text-center text-red-700" v-else>
+                        No task founds!
+                    </ul>
+                </div>
+                <!-- displaying tasks -finished->
+
+                <!-- users information  -->
+                <div class="card w-[1200px]  shadow-2xl bg-gradient-to-tr from-green-200 via-indigo-200 to-orange-300 m-5 p-8 rounded-xl mx-auto grid grid-cols-4">
+                    <h2 class="text-center text-red-400" v-if="!data.length">No user found!</h2>
+                    <div class="user__card w-[250px] min-h-[400px] shadow-2xl rounded-br-2xl mb-5 mx-4"v-for="item in data">
+                        <img :src="item.avatar" alt="image" class=" w-full rounded-tl-2xl" >
+                        <div class="user__card-body p-5"> 
+
+                            <h1 class="text-center font-semibold text-xl">{{item.first_name}} {{item.last_name}}</h1>
+                            <h2 class="text-center font-medium">{{item.email}}</h1>
+                    <span :class="item.status ? 'bg-green-500 hover:bg-green-200 duration-200 hover:text-green-500 duration-100': 'bg-red-500 hover:bg-red-100 duration-150 hover:text-red-500 ' " class="bg-green-500 text-white block p-2 shadow-lg rounded-lg mt-8 text-center font-semibold ">
+                                {{`${item.status ? "Online" : "Offline"}`}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- users info finished -->
+            </div>
+
+            </section>
+            
+                
+        </main>
+        <footer class="bg-green-600 p-4">
+                    <div class="container mx-auto">
+                        <p class="text-center text-white font-bold"> {{new Date().getFullYear()}}</p>
+                    </div>
+            </footer>
+    </div>
+
+    
+</body>
+<!-- main script file  -->
+<script src="./resource.js"></script>
+<script src="./app.js"></script>
+</html>
